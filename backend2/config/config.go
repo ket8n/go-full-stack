@@ -1,5 +1,24 @@
 package config
 
+import (
+	"log"
+	"os"
+
+	"github.com/joho/godotenv"
+)
+
+func init() {
+	// Load .env file
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("Error loading .env file. Using default environment variables.")
+	}
+}
+
 func GetMongoDBURL() string {
-	return "mongodb+srv://ketanchopadekc:B119KosYNmnKXO0p@cluster0.aljug.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+	mongoURI := os.Getenv("MONGODB_URI")
+	if mongoURI == "" {
+		log.Fatal("MONGODB_URI not set in .env file")
+	}
+	return mongoURI
 }
